@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <style>
+            .blue{
+                background-color: #ccccff;
+                border-radius: 7px;
+                float: left;
+                padding: 20px;
+            }
+            .white{
+                border-radius: 7px;
+                border-color: #ccccff;
+                border-style: solid;
+                float: left;
+                padding: 20px;
+            }
+        </style>
+        <script>
+            function f(){
+                var vote_inputs = document.getElementsByTagName("input");
+                nparties = vote_inputs.length;
+                var vote = [];
+                var mandates = [];
+                var divide = [];
+                var partyscore = [];
+                for (let i=0; i < nparties; i++){
+                    vote[i] =  parseFloat(vote_inputs[i].value);
+                    if (vote[i] < 4) vote[i] = 0;
+                    mandates[i] =  0
+                }
+                nummandates = 21;
+                for (let i=0; i < nummandates; i++){
+                    for (let i=0; i < nparties; i++) divide[i] = Math.max(1.2, mandates[i] * 2 + 1);
+                    for (let i=0; i < nparties; i++) partyscore[i] = vote[i] / divide[i];
+                    which_max = -1;
+                    max_value = -1;
+                    for (let j=0; j < nparties; j++){
+                        if (partyscore[j] > max_value){
+                            which_max = j;
+                            max_value = partyscore[j];
+                        }
+                    }
+                    mandates[which_max] = mandates[which_max] + 1;
+                }
+                for (let i=0; i < nparties; i++) document.getElementsByClassName("mand")[i].innerHTML = mandates[i];
+            }
+        </script>
+    </head>
+    <body>
+        <div style="width: 1200px; float: left;">
+            <div class="blue" style="width: 300px; height: 440px;">
+                <h2>Räkna ut mandatfördelningen i Europaparlamentsvalet 2024</h2>
+                <p>Den här webbappen räknar ut mandatfördelningen i Europaparlamentsvalet
+                    baserat på den procentuella fördelningen av rösterna.</p>
+                    <p>Du kan exempelvis fylla i antalet procentenheter som ett parti
+                        får i stöd enligt en opinionsmätning.
+                         Appen visar då vad mandatfördelningen skulle bli om valresultatet
+                         överensstämmer med opinionsmätningen.
+                    </p>
+                    <p>
+                        Appen utgår från antagandet att enbart partier som i dag finns i Europaparlamentet
+                        kommer att klara spärren på 4 procent.
+                        (Det görs dock inget antagande om att alla nuvarande partier klarar spärren.)
+                    </p>
+            </div>
+            <div style="width: 20px; height: 20px; float: left;"></div>
+            <div class="white" style="width: 640px; height: 434px;">
+            <h1>Ange procentenhet för respektive parti</h1>
+        <div style="width: 300px; float: left;">
+        <b>Moderaterna</b><br>
+        <input type="number", id="M"><br>
+        <b>Centerpartiet</b><br>
+        <input type="number", id="C"><br>
+        <b>Liberalerna</b><br>
+        <input type="number", id="L"><br>
+        <b>Kristdemokraterna</b><br>
+        <input type="number", id="KD"><br>
+        <b>Socialdemokraterna</b><br>
+        <input type="number", id="S"><br>
+        <b>Vänsterpartiet</b><br>
+        <input type="number", id="V"><br>
+        <b>Miljöpartiet</b><br>
+        <input type="number", id="MP"><br>
+        <b>Sverigedemokraterna</b><br>
+        <input type="number", id="SD"><br><br>
+        <button onclick="f();">Visa mandatfördelning</button>
+        
+        </div>
+        <div style="width: 300px; float: left;">
+        <table>
+            <tr><th>Parti</th><th>Mandat</th></tr>
+            <tr><td>Moderaterna</td><td class="mand"></td></tr>
+            <tr><td>Centerpartier</td><td class="mand"></td></tr>
+            <tr><td>Liberalerna</td><td class="mand"></td></tr>
+            <tr><td>Kristdemokraterna</td><td class="mand"></td></tr>
+            <tr><td>Socialdemokraterna</td><td class="mand"></td></tr>
+            <tr><td>Vänsterpartiet</td><td class="mand"></td></tr>
+            <tr><td>Miljöpartiet</td><td class="mand"></td></tr>
+            <tr><td>Sverigedemokraterna</td><td class="mand"></td></tr>
+        </table>
+        </div>
+    </div>
+    <div style="width: 100%; height: 20px; float: left;"></div>
+    <div class="white" style="width: 1000px;">
+        <h2>Om appen</h2>
+        <p>Appen räknar ut mandatfördelningen baserat på jämkade uddatalsmetoden,
+             som används både i Europaparlamentsvalet och i inhemska svenska val.</p>
+            <p>Metoden beskrivs i valmyndighetens dokument 
+                <em>Mandatfördelning - Regler och räkneexempel för val till riksdagen, Europaparlamentet, region- och kommunfullmäktige</em> från 2002. Dokumentet kan läsas <a href="https://www.val.se/download/18.75995f7b17f5a986a4e252b/1687177550801/manual-mandatfordelning-val-v785-05.pdf">här</a>.</p>
+                <p>Koden som beräknar mandatfördelningen är tillgänglig här.</p>
+                <p>Kontakt: karl.sigfrid [at] stat.su.se</p>
+    </div>
+    </div>
+
+    </body>
+</html>
