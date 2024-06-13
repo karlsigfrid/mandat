@@ -2,38 +2,33 @@
     <head>
         <style>
             .blue{
-                background-color: #eebb55;
+                background-color: #ccccff;
                 border-radius: 7px;
                 float: left;
                 padding: 20px;
             }
             .white{
                 border-radius: 7px;
-                border-color: #eebb55;
+                border-color: #ccccff;
                 border-style: solid;
                 float: left;
                 padding: 20px;
             }
-
-            td, th{
-                text-align: left;
-                width: 160px;
-            }
-
-            body {
-               font-family: Calibri, serif !important;
-               font-weight: 400;
-               font-style: normal;
-}
-
         </style>
         <script>
-            function votes_to_mandates(vote, nummandates){
-                var nparties = vote.length;
+            function f(){
+                var vote_inputs = document.getElementsByTagName("input");
+                nparties = vote_inputs.length;
+                var vote = [];
                 var mandates = [];
                 var divide = [];
                 var partyscore = [];
-                for (let i=0; i < nparties; i++) mandates[i] =  0;
+                for (let i=0; i < nparties; i++){
+                    vote[i] =  parseFloat(vote_inputs[i].value);
+                    if (vote[i] < 4) vote[i] = 0;
+                    mandates[i] =  0;
+                }
+                nummandates = 21;
                 for (let i=0; i < nummandates; i++){
                     for (let i=0; i < nparties; i++) divide[i] = Math.max(1.2, mandates[i] * 2 + 1);
                     for (let i=0; i < nparties; i++) partyscore[i] = vote[i] / divide[i];
@@ -46,47 +41,16 @@
                         }
                     }
                     mandates[which_max] = mandates[which_max] + 1;
-            }
-            return mandates;
-        }
-            function f(){
-                var vote_inputs = document.getElementsByTagName("input");
-                nparties = vote_inputs.length;
-                var voteraw = [];
-                var vote = [];
-                var any0 = false;
-                for (let i=0; i < nparties; i++){
-                    voteraw[i] =  parseFloat(vote_inputs[i].value);
-                    vote[i] = voteraw[i];
-                    if (vote[i] < 4){
-                         vote[i] = 0;
-                         any0 = true;
-                    }
                 }
-                var mandates = votes_to_mandates(vote, 349);
                 for (let i=0; i < nparties; i++) document.getElementsByClassName("mand")[i].innerHTML = mandates[i];
-                document.getElementsByClassName("coal")[0].innerHTML = mandates[0]+mandates[2]+mandates[3]+mandates[7];
-                document.getElementsByClassName("coal")[1].innerHTML = mandates[1]+mandates[4]+mandates[5]+mandates[6];
-                if (any0){
-                    var mandates = votes_to_mandates(voteraw, 349);
-                    document.getElementsByClassName("coal2")[0].innerHTML = mandates[0]+mandates[2]+mandates[3]+mandates[7];
-                    document.getElementsByClassName("coal2")[1].innerHTML = mandates[1]+mandates[4]+mandates[5]+mandates[6];
-                    document.getElementsByClassName("no_threshold")[0].style ="visibility: visible;";
-                    document.getElementsByClassName("asterisk")[0].style ="visibility: visible;";
-
-                }
             }
         </script>
     </head>
     <body>
-        <div class="blue" style="width: 1000px;">
-            <h1>Mandatfördelaren</h1>
-        </div>
-        <div style="width: 100%; height: 20px; float: left;"></div>
         <div style="width: 1200px; float: left;">
-            <div class="blue" style="width: 300px; height: 540px;">
-                <h2>Räkna ut mandatfördelningen i riksdagen</h2>
-                <p>Den här webbappen räknar ut mandatfördelningen i riksdagsvalet
+            <div class="blue" style="width: 300px; height: 440px;">
+                <h2>Räkna ut mandatfördelningen i Europaparlamentsvalet 2024</h2>
+                <p>Den här webbappen räknar ut mandatfördelningen i Europaparlamentsvalet
                     baserat på den procentuella fördelningen av rösterna.</p>
                     <p>Du kan exempelvis fylla i antalet procentenheter som respektive parti
                         får enligt en opinionsmätning.
@@ -94,21 +58,13 @@
                          mätningsens siffror vore valresultat.
                     </p>
                     <p>
-                        Appen utgår från antagandet att inga nya partier
-                        kommer att klara spärren på 4 procent. Skulle det tillkomma
-                        nya partier som bedöms ha en chans att klara spärren
-                        kommer appen att uppdateras. 
+                        Appen utgår från antagandet att enbart partier som i dag finns i Europaparlamentet
+                        kommer att klara spärren på 4 procent.
+                        (Det görs dock inget antagande om att alla nuvarande partier klarar spärren.)
                     </p>
-                    <div class="asterisk" style="visibility: hidden;">
-                        <p>*Så här fördelar sig mandaten om alla partier
-                             klarar 4-procentsspärren. Vi antar då att partier
-                             med ett stöd under 4 procent klarar spärren
-                             genom stödröster som tas från ett annat parti
-                             inom samma koalition.
-                            </p></div>
             </div>
             <div style="width: 20px; height: 20px; float: left;"></div>
-            <div class="white" style="width: 640px; height: 534px;">
+            <div class="white" style="width: 640px; height: 434px;">
             <h1>Ange procentenhet för respektive parti</h1>
         <div style="width: 300px; float: left;">
         <b>Moderaterna</b><br>
@@ -142,21 +98,7 @@
             <tr><td>Miljöpartiet</td><td class="mand"></td></tr>
             <tr><td>Sverigedemokraterna</td><td class="mand"></td></tr>
         </table>
-        <div style="width: 100%; height: 20px; float: left;"></div>
-        <table>
-            <tr><th>Koalition</th><th>Mandat</th></tr>
-            <tr><td>M+KD+SD+L</td><td class="coal"></td></tr>
-            <tr><td>S+MP+V+C</td><td class="coal"></td></tr>
-        </table>
-        <div, class="no_threshold", style="visibility: hidden;">
-        <h3>Om alla partier klarar spärren*</h3>
-        <table>
-            <tr><th>Koalition</th><th>Mandat</th></tr>
-            <tr><td>M+KD+SD+L</td><td class="coal2"></td></tr>
-            <tr><td>S+MP+V+C</td><td class="coal2"></td></tr>
-        </table>
         </div>
-    </div>
     </div>
     <div style="width: 100%; height: 20px; float: left;"></div>
     <div class="white" style="width: 1000px;">
@@ -166,7 +108,6 @@
             <p>Metoden beskrivs i valmyndighetens dokument 
                 <em>Mandatfördelning - Regler och räkneexempel för val till riksdagen, Europaparlamentet, region- och kommunfullmäktige</em> från 2002. Dokumentet kan läsas <a href="https://www.val.se/download/18.75995f7b17f5a986a4e252b/1687177550801/manual-mandatfordelning-val-v785-05.pdf">på valmyndighetens webbplats</a>.</p>
                 <p>Koden som beräknar mandatfördelningen finns tillgänglig <a href="https://github.com/karlsigfrid/mandat">på Github</a>.</p>
-                <p>Appen är utvecklad av Karl Sigfrid, som är doktorand i statistik <a href="https://www.su.se/profiles/kasi3175-1.513541">vid Stockholms universitet.</a></p>
                 <p>Kontakt: karl.sigfrid [at] stat.su.se</p>
     </div>
     </div>
